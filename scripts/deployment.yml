@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: Deployment 
+metadata:
+  name: book-catalog
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: book-catalog
+  template:
+    metadata:
+      labels:
+        app: book-catalog
+    spec:
+      imagePullSecrets:
+      - name: acr-auth
+      containers:
+      - name: book-catalog
+        image: sit722nipuna.azurecr.io/book_catalog:2
+        ports:
+        - containerPort: 8000 
+        env:
+        - name: DATABASE_URL
+          value: "postgresql://nipunaazure_user:GiwrEDDjjmNqybqWtkk1j5NbYnaHvJQR@dpg-crmp781u0jms7397cn0g-a.oregon-postgres.render.com/nipunaazure"
+          
+---
+apiVersion: v1
+kind: Service 
+metadata:
+  name: book-catalog
+spec:
+  selector:
+    app: book-catalog
+  type: LoadBalancer 
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000
+
+
+---
+apiVersion: apps/v1
+kind: Deployment 
+metadata:
+  name: inventory-management
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: inventory-management
+  template:
+    metadata:
+      labels:
+        app: inventory-management
+    spec:
+      imagePullSecrets:
+      - name: acr-auth
+      containers:
+      - name: inventory-management
+        image: sit722nipuna.azurecr.io/inventory_management:2
+        ports:
+        - containerPort: 8000 
+        env:
+        - name: DATABASE_URL
+          value: "postgresql://nipunaazure_user:GiwrEDDjjmNqybqWtkk1j5NbYnaHvJQR@dpg-crmp781u0jms7397cn0g-a.oregon-postgres.render.com/nipunaazure"
+          
+---
+apiVersion: v1
+kind: Service 
+metadata:
+  name: inventory-management
+spec:
+  selector:
+    app: inventory-management
+  type: LoadBalancer 
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000
+  

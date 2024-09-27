@@ -1,0 +1,26 @@
+services:
+  book_catalog:
+    image: book_catalog:2
+    build:
+      context: ./bookcatalog 
+      dockerfile: Dockerfile
+    container_name: book_catalog
+    platform: "linux/arm64" 
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://nipunaazure_user:GiwrEDDjjmNqybqWtkk1j5NbYnaHvJQR@dpg-crmp781u0jms7397cn0g-a.oregon-postgres.render.com/nipunaazure
+    restart: "no"
+
+  inventory_management:
+    image: inventory management:2
+    bulld:
+      context: ./inventory_management
+      dockerfiles: Dockerfile
+  container_name: inventory_management
+  platform: linux/arm64
+  ports:
+    - "8000:8000" 
+  environment:
+    -DATABASE_URL=postgresql://nipunaazure_user:GiwrEDDjjmNqybqWtkk1j5NbYnaHvJQR@dpg-crmp781u0jms7397cn0g-a.oregon-postgres.render.com/nipunaazure
+  restart: "no"
